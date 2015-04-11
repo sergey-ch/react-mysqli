@@ -9,14 +9,8 @@ Add this crap to your composer.json:
 ```
 {
   "require": {
-    "atrox/async-mysql": "dev-master"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/kaja47/async-mysql"
-    }
-  ]
+    "khr/react-mysql": "*"
+  }
 }
 
 ```
@@ -35,9 +29,11 @@ $makeConnection = function () {
   return mysqli_connect('localhost', 'user', 'pass', 'dbname');
 };
 
-$mysql = new Atrox\AsyncMysql($loop, $makeConnection);
+$mysql = new \khr\React\Mysql\Client($loop, new \khr\React\Mysql\Pool(function(){
+    return mysqli_connect('127.0.0.1', 'root', '', 'test');
+}, 10));
 $mysql->query('select * from ponies_and_unicorns')->then(
-  function ($result) { writeHttpResponse(json_encode($result->fetch_all(MYSQLI_ASSOC))); $result->close(); },
+  function ($result) { writeHttpResponse(json_encode($result->all())); },
   function ($error)  { writeHeader500(); }
 );
 ```
