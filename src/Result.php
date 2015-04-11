@@ -17,7 +17,11 @@ class Result {
     }
 
     public function all() {
-        return $this->result->fetch_all();
+        $rows = [];
+        while($row = $this->result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
     }
 
 
