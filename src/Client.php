@@ -86,7 +86,7 @@ class Client {
                                     if ($result === false) {
                                         $deferred->reject(new Exception($conn->error));
                                     } else {
-                                        $deferred->resolve(new Result($result));
+                                        $deferred->resolve(new Result($result, $conn->insert_id, $conn->affected_rows));
                                     }
                                 }
 

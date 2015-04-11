@@ -9,24 +9,32 @@ class Result {
     /**
      * @var mysqli_result
      */
-    public $result;
+    public $rows = [];
+
+    public $insert_id;
+
+    public $affected_rows;
 
 
-    public function __construct(mysqli_result $res) {
-        $this->result = $res;
+    public function __construct($res, $insert_id, $affected_rows) {
+
+        if ($res instanceof mysqli_result) {
+            while($row = $res->fetch_assoc()) {
+                $this->rows[] = $row;
+            }
+            $res->free();
+        }
+
+        $this->insert_id = $insert_id;
+        $this->affected_rows = $affected_rows;
     }
 
     public function all() {
-        $rows = [];
-        while($row = $this->result->fetch_assoc()) {
-            $rows[] = $row;
-        }
-        return $rows;
+        return $this->rows;
     }
 
-
     public function one() {
-        return current($this->result->fetch_assoc());
+        return current($this->all());
     }
 
     public function column() {
@@ -42,10 +50,6 @@ class Result {
     }
 
     public function exists() {
-        return $this->result->num_rows > 0;
-    }
-
-    public function __destruct() {
-        $this->result->free();
+        return !empty($this->rows);
     }
 }
