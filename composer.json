@@ -13,7 +13,7 @@
   },
   "autoload": {
     "psr-4": {
-      "khr\\React\\Mysql\\": "src/"
+      "KHR\\React\\Mysql\\": "src/"
     }
   }
 }
