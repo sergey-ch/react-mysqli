@@ -1,7 +1,7 @@
 <?php
 
 
-namespace khr\React\Mysql;
+namespace KHR\React\Mysql;
 
 use React\Promise\Deferred;
 

@@ -29,7 +29,7 @@ $makeConnection = function () {
   return mysqli_connect('localhost', 'user', 'pass', 'dbname');
 };
 
-$mysql = new \khr\React\Mysql\Client($loop, new \khr\React\Mysql\Pool(function(){
+$mysql = new \KHR\React\Mysql\Client($loop, new \KHR\React\Mysql\Pool(function(){
     return mysqli_connect('127.0.0.1', 'root', '', 'test');
 }, 10));
 $mysql->query('select * from ponies_and_unicorns')->then(

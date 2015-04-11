@@ -1,6 +1,6 @@
 <?php
 
-namespace khr\React\Mysql;
+namespace KHR\React\Mysql;
 
 use React\EventLoop\LoopInterface;
 use React\EventLoop\Timer\TimerInterface;
