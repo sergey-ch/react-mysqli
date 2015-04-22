@@ -36,6 +36,8 @@ class Client {
      */
     private $conn = [];
 
+    private $query = [];
+
 
     /**
      * @param LoopInterface
@@ -61,6 +63,7 @@ class Client {
 
             $id = spl_object_hash($conn);
             $this->conn[$id] = $conn;
+            $this->query[$id] = $query;
             $this->deferred[$id] = $deferred = new Deferred();
 
             if (!isset($this->timer)) {
@@ -84,21 +87,21 @@ class Client {
                                      */
                                     $result = $conn->reap_async_query();
                                     if ($result === false) {
-                                        $deferred->reject(new Exception($conn->error));
+                                        $deferred->reject(new Exception($conn->error . '; sql: ' . $this->query[$id]));
                                     } else {
                                         $deferred->resolve(new Result($result, $conn->insert_id, $conn->affected_rows));
                                     }
                                 }
 
                                 if ($type == 'errors') {
-                                    $deferred->reject(new Exception($conn->error));
+                                    $deferred->reject(new Exception($conn->error . '; sql: ' . $this->query[$id]));
                                 }
 
                                 if ($type == 'reject') {
-                                    $deferred->reject(new Exception('Query was rejected'));
+                                    $deferred->reject(new Exception('Query was rejected; sql: ' . $this->query[$id]));
                                 }
 
-                                unset($this->deferred[$id], $this->conn[$id]);
+                                unset($this->deferred[$id], $this->conn[$id], $this->query[$id]);
                                 $this->pool->free($conn);
                             }
                         }
