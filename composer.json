@@ -8,7 +8,7 @@
   }],
   "require": {
     "php": ">=5.4.0",
-    "react/promise": "dev-master",
+    "react/promise": "~2.1",
     "react/event-loop": "dev-master"
   },
   "autoload": {
