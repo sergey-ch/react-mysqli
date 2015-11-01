@@ -9,8 +9,8 @@ use \mysqli;
 use \mysqli_result;
 use \Exception;
 
-class Client {
-
+class Client
+{
     /**
      * @var LoopInterface
      */
@@ -36,14 +36,18 @@ class Client {
      */
     private $conn = [];
 
+    /**
+     * @var string[]
+     */
     private $query = [];
 
 
     /**
-     * @param LoopInterface
-     * @param $connectionPool Pool either connection pool or function that makes connection
+     * @param LoopInterface $loop
+     * @param Pool $connectionPool Pool either connection pool or function that makes connection
      */
-    function __construct(LoopInterface $loop, $connectionPool) {
+    public function __construct(LoopInterface $loop, Pool $connectionPool)
+    {
         $this->loop = $loop;
         $this->pool = $connectionPool;
     }
@@ -53,7 +57,8 @@ class Client {
      * @param string
      * @return \React\Promise\PromiseInterface
      */
-    function query($query) {
+    public function query($query)
+    {
         return $this->pool->getConnection()->then(function (mysqli $conn) use ($query) {
             $status = $conn->query($query, MYSQLI_ASYNC);
             if ($status === false) {
@@ -67,23 +72,24 @@ class Client {
             $this->deferred[$id] = $deferred = new Deferred();
 
             if (!isset($this->timer)) {
-                $this->timer = $this->loop->addPeriodicTimer(0.01, function (){
+                $this->timer = $this->loop->addPeriodicTimer(0.01, function () {
 
                     $links = $errors = $reject = $this->conn;
                     mysqli_poll($links, $errors, $reject, 0); // don't wait, just check
 
                     $each = array('links' => $links, 'errors' => $errors, 'reject' => $reject) ;
-                    foreach($each as $type => $connects) {
+                    foreach ($each as $type => $connects) {
                         /**
-                         * @var $conn mysqli
+                         * @var mysqli $conn
                          */
-                        foreach($connects as $conn) {
+                        foreach ($connects as $conn) {
                             $id = spl_object_hash($conn);
-                            if(isset($this->conn[$id])) {
+
+                            if (isset($this->conn[$id])) {
                                 $deferred = $this->deferred[$id];
                                 if ($type == 'links') {
                                     /**
-                                     * @var $result mysqli_result
+                                     * @var mysqli_result $result
                                      */
                                     $result = $conn->reap_async_query();
                                     if ($result === false) {

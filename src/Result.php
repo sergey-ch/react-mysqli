@@ -4,22 +4,29 @@ namespace KHR\React\Mysql;
 
 use \mysqli_result;
 
-class Result {
-
+class Result
+{
     /**
-     * @var mysqli_result
+     * @var array
      */
     public $rows = [];
 
+    /**
+     * Mysql last_insert_id
+     * @var int
+     */
     public $insert_id;
 
+    /**
+     * Number affected rows
+     * @var int
+     */
     public $affected_rows;
 
-
-    public function __construct($res, $insert_id, $affected_rows) {
-
+    public function __construct($res, $insert_id, $affected_rows)
+    {
         if ($res instanceof mysqli_result) {
-            while($row = $res->fetch_assoc()) {
+            while ($row = $res->fetch_assoc()) {
                 $this->rows[] = $row;
             }
             $res->free();
@@ -29,27 +36,52 @@ class Result {
         $this->affected_rows = $affected_rows;
     }
 
-    public function all() {
+    /**
+     * Return all rows
+     * @return array
+     */
+    public function all()
+    {
         return $this->rows;
     }
 
-    public function one() {
+    /**
+     * Return one row
+     * @return mixed
+     */
+    public function one()
+    {
         return current($this->all());
     }
 
-    public function column() {
+    /**
+     * Values of first column
+     * @return array
+     */
+    public function column()
+    {
         $res = [];
-        foreach($this->all() as $row) {
+        foreach ($this->all() as $row) {
             $res[] = current($row);
         }
         return $res;
     }
 
-    public function scalar() {
+    /**
+     * Value of first field in first row
+     * @return mixed
+     */
+    public function scalar()
+    {
         return current($this->one());
     }
 
-    public function exists() {
+    /**
+     * Is empty result set?
+     * @return bool
+     */
+    public function exists()
+    {
         return !empty($this->rows);
     }
 }

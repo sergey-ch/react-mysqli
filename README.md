@@ -2,19 +2,6 @@
 
 Asynchronous & non-blocking MySQL driver for [React.PHP](https://github.com/reactphp/react).
 
-## Install
-
-Add this crap to your composer.json:
-
-```
-{
-  "require": {
-    "khr/react-mysql": "*"
-  }
-}
-
-```
-
 ## Usage
 
 Create instance of AsyncMysql and call method `query`.

@@ -1,32 +1,48 @@
 <?php
 
-
 namespace KHR\React\Mysql;
 
+use Exception;
+use mysqli;
 use React\Promise\Deferred;
 
-class Pool {
-
+class Pool
+{
+    /**
+     * @var callable
+     * @return mysqli
+     */
     private $makeConnection;
+
+    /**
+     * @var int
+     */
     private $maxConnections;
 
-    /** pool of all connections (both idle and busy) */
+    /**
+     * pool of all connections (both idle and busy)
+     * @var mysqli[]
+     */
     private $pool = [];
 
+    /**
+     * @var int
+     */
     private $pool_i = 0;
 
     /** array of Deferred objects waiting to be resolved with connection */
     private $waiting = [];
 
 
-    function __construct($makeConnection, $maxConnections = 100) {
+    public function __construct(callable $makeConnection, $maxConnections = 100)
+    {
         $this->makeConnection = $makeConnection;
         $this->maxConnections = $maxConnections;
     }
 
 
-    function getConnection() {
-
+    public function getConnection()
+    {
         if (!empty($this->pool)) {
             $key = key($this->pool);
             $conn = $this->pool[$key];
@@ -40,16 +56,21 @@ class Pool {
             return $deferred->promise();
         }
 
+        /**
+         * @var mysqli|false $conn
+         */
         $conn = call_user_func($this->makeConnection);
-        if ($conn !== false){
+        if ($conn !== false) {
             $this->pool_i++;
         }
 
-        return ($conn === false) ? \React\Promise\reject(new \Exception(mysqli_connect_error())) : \React\Promise\resolve($conn);
+        return ($conn === false)
+            ? \React\Promise\reject(new Exception($conn->connect_error, $conn->connect_errno))
+            : \React\Promise\resolve($conn);
     }
 
 
-    function free(\mysqli $conn)
+    public function free(mysqli $conn)
     {
         if ($conn->errno != 2006) {
             $this->pool[] = $conn;
@@ -61,9 +82,12 @@ class Pool {
             $key = key($this->waiting);
             $deferred = $this->waiting[$key];
             unset($this->waiting[$key]);
-            $this->getConnection()->done(function($conn) use($deferred){
+            $this->getConnection()->done(function ($conn) use ($deferred) {
+                /**
+                 * @var Deferred $deferred
+                 */
                 $deferred->resolve($conn);
-            },[$deferred, 'reject']);
+            }, [$deferred, 'reject']);
         }
     }
 }
