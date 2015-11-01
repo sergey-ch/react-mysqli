@@ -2,14 +2,16 @@
   "name": "pahenrus/react-mysql",
   "description": "Asynchronous & non-blocking MySQL driver for React.PHP",
   "license": "None",
-  "authors": [{
-    "name": "Pavel Kozlov",
-    "email": "pavel@internet-ufa.ru"
-  }],
+  "authors": [
+    {
+      "name": "Pavel Kozlov",
+      "email": "pavel@internet-ufa.ru"
+    }
+  ],
   "require": {
     "php": ">=5.4.0",
     "react/promise": "~2.1",
-    "react/event-loop": "dev-master"
+    "react/event-loop": "0.5.*-dev"
   },
   "autoload": {
     "psr-4": {
