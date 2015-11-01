@@ -1,6 +1,6 @@
 <?php
 
-namespace pahenrus\React\Mysql;
+namespace React\MySQLi;
 
 use \mysqli_result;
 

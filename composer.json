@@ -1,5 +1,5 @@
 {
-  "name": "pahenrus/react-mysql",
+  "name": "pahenrus/react-mysqli",
   "description": "Asynchronous & non-blocking MySQL driver for React.PHP",
   "license": "None",
   "authors": [
@@ -15,7 +15,7 @@
   },
   "autoload": {
     "psr-4": {
-      "pahenrus\\React\\Mysql\\": "src/"
+      "React\\MySQLi\\": "src/"
     }
   }
 }
