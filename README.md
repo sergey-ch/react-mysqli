@@ -4,6 +4,24 @@ Asynchronous & non-blocking MySQLi driver for [React.PHP](https://github.com/rea
 
 Require [php-mysqlnd](http://php.net/manual/ru/book.mysqlnd.php) extension
 
+## Install
+
+Add the following lines to your composer.json
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/pahenrus/react-mysqli"
+        }
+    ],
+    "require": {
+        "pahenrus/react-mysqli": "dev-master"
+    }
+}
+```
+
 ## Example
 
 ```php
