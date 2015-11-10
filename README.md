@@ -6,20 +6,8 @@ Require [php-mysqlnd](http://php.net/manual/ru/book.mysqlnd.php) extension
 
 ## Install
 
-Add the following lines to your composer.json
-
-```json
-{
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/pahenrus/react-mysqli"
-        }
-    ],
-    "require": {
-        "pahenrus/react-mysqli": "dev-master"
-    }
-}
+```bash
+composer require pahenrus/react-mysqli
 ```
 
 ## Example
