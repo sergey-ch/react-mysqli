@@ -12,7 +12,7 @@
     "php": ">=5.4.0",
     "ext-mysqlnd": "*",
     "react/promise": "~2.1",
-    "react/event-loop": "dev-master"
+    "react/event-loop": "0.4.*"
   },
   "autoload": {
     "psr-4": {
