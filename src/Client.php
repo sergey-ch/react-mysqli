@@ -72,7 +72,7 @@ class Client
             $this->deferred[$id] = $deferred = new Deferred();
 
             if (!isset($this->timer)) {
-                $this->timer = $this->loop->addPeriodicTimer(0.01, function () {
+                $this->timer = $this->loop->addPeriodicTimer(0.001, function () {
 
                     $links = $errors = $reject = $this->conn;
                     mysqli_poll($links, $errors, $reject, 0); // don't wait, just check
