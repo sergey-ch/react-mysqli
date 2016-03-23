@@ -65,7 +65,7 @@ class Pool
         }
 
         return ($conn === false)
-            ? \React\Promise\reject(new Exception($conn->connect_error, $conn->connect_errno))
+            ? \React\Promise\reject(new Exception(mysqli_connect_error()))
             : \React\Promise\resolve($conn);
     }
 
