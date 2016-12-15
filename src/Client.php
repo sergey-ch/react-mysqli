@@ -136,7 +136,7 @@ class Client
      */
     public function escape(\mysqli $conn, $query, array $params = []) {
         $filtered_params = array_map(function ($value) use ($conn) {
-            return $conn->real_escape_string($value);
+            return '"' . $conn->real_escape_string($value) . '"';
         }, $params);
 
         return str_replace(array_keys($filtered_params), array_values($filtered_params), $query);
