@@ -57,9 +57,11 @@ class Client
      * @param string
      * @return \React\Promise\PromiseInterface
      */
-    public function query($query)
+    public function query($query, array $params = [])
     {
-        return $this->pool->getConnection()->then(function (mysqli $conn) use ($query) {
+        return $this->pool->getConnection()->then(function (\mysqli $conn) use ($query, $params) {
+            $query = $this->escape($conn, $query, $params);
+
             $status = $conn->query($query, MYSQLI_ASYNC);
             if ($status === false) {
                 $this->pool->free($conn);
@@ -122,5 +124,22 @@ class Client
 
             return $deferred->promise();
         });
+    }
+
+    /**
+     * Escape SQL query parameters such as :foo => "bar"
+     * @param mysqli $conn
+     * @param $query
+     * @param array $params
+     *
+     * @return mixed
+     */
+    public function escape(\mysqli $conn, $query, array $params = []) {
+        $filtered_params = array_map(function ($value) use ($conn) {
+            return $conn->real_escape_string($value);
+        }, $params);
+
+        return str_replace(array_keys($filtered_params), array_values($filtered_params), $query);
+
     }
 }
